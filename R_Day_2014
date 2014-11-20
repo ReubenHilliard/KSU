@@ -1,0 +1,304 @@
+KSU R Day 2014
+---
+NTS <- read.csv ("E:\\R_Day _Project\\RDAY_Final\\Cleaned_Data.csv")
+
+attach(NTS)
+head(NTS)
+tail(NTS)
+dim(NTS)
+summary(NTS)
+
+
+###CREATE ALL CATEGORICAL VARIABLES###
+
+
+##AGE GROUP 1 CATEGORY##
+
+# 1 = Age_17-23
+# 2 = Age_24-29
+# 3 = Age_30-35
+# 4 = Age_36-41
+# 5 = Age_42-47
+# 6 = Age_48-61
+
+
+NTS$StAge [AGE >= 0 & AGE < 20] <- "17 to 19"
+NTS$StAge [AGE >= 20 & AGE < 25] <- "20 to 24"
+NTS$StAge [AGE >= 25 & AGE < 30] <- "25 to 29"
+NTS$StAge [AGE >= 30 & AGE < 35] <- "30 to 34"
+NTS$StAge [AGE >= 35 & AGE < 40] <- "35 to 39"
+NTS$StAge [AGE >= 40 & AGE < 45] <- "40 to 44"
+NTS$StAge [AGE >= 45 & AGE < 62] <- "45 to 61"
+
+attach(NTS)
+levels(StAge) <- c("17 to 19","20 to 24","25 to 29","30 to 34","35 to 
+39","40 to 44","45 to 61") #concatenate levels
+StAge <- ordered(StAge,c("17 to 19","20 to 24","25 to 29","30 to 
+34","35 to 39","40 to 44","45 to 61")) #order levels
+
+
+
+##AGE GROUP 2 CATEGORY##
+
+#ZOOMS IN ON TREND REVERSAL FROM AGES 20-31#
+
+NTS$StAge2 [AGE >= 20 & AGE < 21] <- "20"
+NTS$StAge2 [AGE >= 21 & AGE < 22] <- "21"
+NTS$StAge2 [AGE >= 22 & AGE < 23] <- "22"
+NTS$StAge2 [AGE >= 23 & AGE < 24] <- "23"
+NTS$StAge2 [AGE >= 24 & AGE < 25] <- "24"
+NTS$StAge2 [AGE >= 25 & AGE < 26] <- "25"
+NTS$StAge2 [AGE >= 26 & AGE < 27] <- "26"
+NTS$StAge2 [AGE >= 27 & AGE < 28] <- "27"
+NTS$StAge2 [AGE >= 28 & AGE < 29] <- "28"
+NTS$StAge2 [AGE >= 29 & AGE < 30] <- "29"
+NTS$StAge2 [AGE >= 30 & AGE < 31] <- "30"
+NTS$StAge2 [AGE >= 31 & AGE < 32] <- "31"
+
+attach(NTS)
+levels(StAge2) <-c("20","21","22","23","24","25","26","27","28","29"
+,"30","31") #concatenate levels
+StAge2 <- ordered(StAge2,c("20","21","22","23","24","25","26","27"
+,"28","29","30","31")) #order levels
+
+
+
+##AGE GROUP 3 CATEGORY##
+
+#COMPARES 2 GROUPS BEFORE AND AFTER TREND REVERSAL#
+
+NTS$StAge3 [AGE >= 17 & AGE < 26] <- "Under 26"
+NTS$StAge3 [AGE >= 26 & AGE < 62] <- "26 and Over"
+
+attach(NTS)
+levels(StAge3) <- c("Under 26","26 and Over") #concatenate levels
+StAge3 <- ordered(StAge3,c("Under 26","26 and Over")) #order levels
+
+
+
+##GPA CATEGORICAL VARIABLE##
+
+# Underperform = less than 3.0
+# Average = 3.0 to 3.249
+# Above Average = 3.25 to 3.499
+# Cum Laude = 3.5 to 3.699
+# Magna Cum Laude = 3.7 to 3.899
+# Summa Cum Laude = 3.9 to 4.0
+
+NTS$GPA_CV [KSU_ADJUSTED_GPA < 3.0] <- "Under Perform"
+NTS$GPA_CV [KSU_ADJUSTED_GPA >= 3.0 & KSU_ADJUSTED_GPA < 3.25] <- 	"Average"
+NTS$GPA_CV [KSU_ADJUSTED_GPA >= 3.25 & KSU_ADJUSTED_GPA < 3.5] <- 
+"Above Average"
+NTS$GPA_CV [KSU_ADJUSTED_GPA >= 3.5 & KSU_ADJUSTED_GPA < 3.70] <- 
+"Cum Laude"
+NTS$GPA_CV [KSU_ADJUSTED_GPA >= 3.70 & KSU_ADJUSTED_GPA < 3.9] <- 
+"Magna"
+NTS$GPA_CV [KSU_ADJUSTED_GPA >= 3.9] <- "Summa"
+
+attach(NTS)
+levels(GPA_CV) <- c("Under Perform","Average","Above Average","Cum 
+Laude","Magna","Summa") #concatenate levels
+GPA_CV <- ordered(GPA_CV,c("Under Perform","Average","Above 
+Average","Cum Laude","Magna","Summa")) #order levels
+###FREQUENCY TABLES FOR ALL AGE GROUPS###
+
+
+##FREQUENCY TABLE FOR AGE GROUP 1##
+
+table(StAge)
+ft_StAge<-table(StAge) #Frequencies for table
+n_StAge<-length(StAge) #length of data
+rft_StAge <- round(ft_StAge/n_StAge*100,2) #rounded relative freq
+rft_StAge <- paste(rft_StAge,"%",sep="") #add percent sign
+cft_StAge <- cumsum(ft_StAge)  #cumulative frequency
+crft_StAge <- cumsum(ft_StAge/n_StAge*100) #cumulative relative freq
+crft_StAge <- round(crft_StAge,2) #rounded cumulative relative freq  
+crft_StAge <- paste(crft_StAge,"%",sep="") #add percent sign
+ftab_StAge <- cbind(ft_StAge,cft_StAge,rft_StAge,crft_StAge)  #frequency Table for Age Group 1
+colnames(ftab_StAge)<-c("Frequency","Cumulative Frequency",
+"Percentages","Cumulative Percentages")  #concatenate column names
+
+ftab_StAge #have a look
+
+#write.csv(ftab_StAge,"E:\\R_Day _Project\\RDAY_Final\\ftab_StAge.csv")
+
+
+
+##FREQUENCY TABLE FOR AGE GROUP 2##
+
+table(StAge2)
+ft_StAge2<-table(StAge2) #Frequencies for table
+n_StAge2<-length(StAge2) #length of data
+rft_StAge2 <- round(ft_StAge2/n_StAge2*100,2) #rounded relative freq
+rft_StAge2 <- paste(rft_StAge2,"%",sep="") #add percent sign
+cft_StAge2 <- cumsum(ft_StAge2)  #cumulative frequency
+crft_StAge2 <- cumsum(ft_StAge2/n_StAge2*100) #cumulative relative 
+freq
+crft_StAge2 <- round(crft_StAge2,2) #rounded cumulative relative freq  
+crft_StAge2 <- paste(crft_StAge2,"%",sep="") #add percent sign
+ftab_StAge2 <- cbind(ft_StAge2,cft_StAge2,rft_StAge2,crft_StAge2)  #frequency Table for carbo_cat
+colnames(ftab_StAge2)<-c("Frequency","Cumulative Frequency"
+,"Percentages","Cumulative Percentages")  #concatenate column names
+
+ftab_StAge2 #have a look
+
+#write.csv(ftab_StAge2,"E:\\R_Day _Project\\RDAY_Final\\ftab_StAge2.csv")
+
+
+##FREQUENCY TABLE FOR AGE GROUP 3##
+
+table(StAge3)
+levels(StAge3) <- c("Under 26","26 and Over") #concatenate levels
+StAge3 <- ordered(StAge3,c("Under 26","26 and Over")) #order levels
+ft_StAge3<-table(StAge3) #Frequencies for table
+n_StAge3<-length(StAge3) #length of data
+rft_StAge3 <- round(ft_StAge3/n_StAge3*100,2) #rounded relative freq
+rft_StAge3 <- paste(rft_StAge3,"%",sep="") #add percent sign
+cft_StAge3 <- cumsum(ft_StAge3)  #cumulative frequency
+crft_StAge3 <- cumsum(ft_StAge3/n_StAge3*100) #cumulative relative 
+freq
+crft_StAge3 <- round(crft_StAge3,2) #rounded cumulative relative freq  
+crft_StAge3 <- paste(crft_StAge3,"%",sep="") #add percent sign
+ftab_StAge3 <- cbind(ft_StAge3,cft_StAge3,rft_StAge3,crft_StAge3)  #frequency Table for carbo_cat
+colnames(ftab_StAge3)<-c("Frequency","Cumulative Frequency",
+"Percentages","Cumulative Percentages")  #concatenate column names
+
+ftab_StAge3 #have a look
+
+#write.csv(ftab_StAge2,"E:\\R_Day _Project\\RDAY_Final\\ftab_StAge2.csv")
+
+
+
+
+###CONTINGENCY TABLES FOR GPA CATEGORY BY AGE GROUPS###
+
+##GPA CATEGORY BY AGE GROUP 1##
+
+#Row Percents
+
+ctab_GPA_Age1 <- table(GPA_CV,StAge) #contingency table
+colnames(ctab_GPA_Age1) <- c("17 to 19","20 to 24","25 to 29","30 to 
+34","35 to 39","40 to 44","45 to 61") #concatenate column names
+
+#write.csv(ctab_GPA_Age1,"E:\\R_Day _Project\\RDAY_Final\\ctab_GPA_Age1.csv")
+
+
+#Column Percents
+
+colpt <- round(prop.table(ctab_GPA_Age1,2)*100,2) #rounded column 
+percents
+clpt <- prop.table(ctab_GPA_Age1,2) #unrounded table to export 
+
+#write.csv(clpt,"E:\\R_Day _Project\\RDAY_Final\\clpt.csv")
+
+
+
+#100% Stacked Bar of Age Group 1 By GPA Category 
+
+ctab2_Age1_GPA <- table(StAge,GPA_CV) #create contingency table for 
+mfr by ordered Age 1
+rwpt2_Age1_GPA <- prop.table(ctab2_Age1_GPA,1) #proportion table for 
+100% stacked
+par(mfrow=c(1, 1), mar=c(5, 5, 5, 10),fg="yellow2", bg="gray51",
+col.main="yellow2",col.axis="yellow2",col.lab="yellow2") #set graphical parameters to provide room for legend
+SB_AGE1 <- barplot(t(rwpt2_Age1_GPA*100),ylim = c(0,110),
+border="black",col=c("firebrick3","darkorange2","dark blue",
+"blue","forestgreen","green1"),main="Figure 1:  100% Stacked Bar Chart of Age Group by GPA Category  (n=25922)", ylab="Proportion"
+,xlab="Age Category",legend.text = TRUE,args.legend = list(x = 6 + 6.8, y=100, bty = "n")) #create 100% stacked bar with legend outside of plot area
+text(0.7, 103, "3385")
+text(1.9, 103, "14396")
+text(3.1, 103, "4301")
+text(4.3, 103, "1647")
+text(5.5, 103, "882")
+text(6.7, 103, "576")
+text(7.9, 103, "735")
+
+
+##GPA CATEGORY BY AGE GROUP 2##
+
+#Row Percents
+
+ctab_GPA_Age2 <- table(GPA_CV,StAge2) #contingency table
+colnames(ctab_GPA_Age2) <- c("20","21","22","23","24","25","26","27",
+"28","29","30","31") #concatenate column names
+
+#write.csv(ctab_GPA_Age2,"E:\\R_Day _Project\\RDAY_Final\\ctab_GPA_Age2.csv")
+
+#Column Percents
+
+colpt2 <- round(prop.table(ctab_GPA_Age2,2)*100,2) #rounded column 
+percents
+clpt2 <- prop.table(ctab_GPA_Age2,2) #unrounded table to export 
+
+#write.csv(clpt2,"E:\\R_Day _Project\\RDAY_Final\\clpt2.csv")
+
+
+#100% Stacked Bar of Age Group 2 By GPA Category 
+
+ctab2_Age2_GPA <- table(StAge2,GPA_CV) #create contingency table for 
+Age 2 By GPA Cat
+rwpt2_Age2_GPA <- prop.table(ctab2_Age2_GPA,1) #proportion table for 
+100% stacked
+par(mfrow=c(1, 1), mar=c(5, 8, 4, 12),fg="yellow2", bg="gray51"
+,col.main="yellow2",col.axis="yellow2",col.lab="yellow2") #set graphical parameters to provide room for legend
+SB_AGE2 <- barplot(t(rwpt2_Age2_GPA*100),ylim = c(0,110),
+border="black",col=c("firebrick3","darkorange2","dark blue",
+"blue","forestgreen","green1"),main="Figure 3:  100% Stacked Bar Chart of Age Group 2 by GPA Category(n=25922)",ylab="Proportion"
+,xlab="Age Category",legend.text = TRUE,args.legend = list(x = 11+14.7 , y=100, bty = "n")) #create 100% stacked bar with legend outside of plot area
+text(0.7, 103, "3271")
+text(1.9, 103, "3283")
+text(3.1, 103, "3224")
+text(4.3, 103, "2641")
+text(5.5, 103, "1977")
+text(6.7, 103, "1362")
+text(7.9, 103, "1021")
+text(9.1, 103, "763")
+text(10.3, 103, "675")
+text(11.5, 103, "480")
+text(12.7, 103, "443")
+text(13.9, 103, "360")
+
+
+##SEGMENTED REGRESSION GPA BY AGE##
+
+par(mfrow=c(1, 1), mar=c(7, 8, 4, 8),fg="black", bg="gray51"
+,col.main="yellow2",col.axis="yellow2",col.lab="yellow2")
+plot(AGE,KSU_ADJUSTED_GPA, ylim=c(2,4),xlim=c(17,62),pch=20)
+
+#install.packages("segmented")
+library(segmented)
+
+lin.mod <- lm(KSU_ADJUSTED_GPA~AGE)
+summary(lin.mod)
+
+segmented.mod <- segmented(lin.mod, seg.Z = ~AGE, psi=30)
+summary(segmented.mod)
+
+
+plot(segmented.mod, add=T, pch=20, interc=TRUE, col="red",lwd=3,
+conf.level=.95,shade=TRUE)
+abline(v=25.5, col= "blue", lwd=3)
+title(main = "Figure 3: Segmented Regression of Student GPA by Age (n=29522)")
+
+
+
+
+##HOPE Scholarship Data Script##
+
+
+HOPEDATA <- read.csv("E:\\R_Day _Project\\RDAY_PROJECT_FINAL\\Hope_Scholarship_Award_Data.csv")
+attach(HOPEDATA)
+
+par(bg="gray51", col.main="yellow2", col.lab="yellow2", mar=c(5,7,6,5))
+AMT_BP <- barplot(Amount,main= "Bar Chart of Hope Scholarship Award Amount",ylim=c(0,800),
+	ylab = "Award Amount (in millions)", xlab= "Fiscal Year", col="yellow2",bg="gray51",
+	names.arg = c("2006-2007","2007-2008","2008-2009","2009-2010","2010-2011","2011-2012","2012-2013","2013-2014"))
+text(0.7, 475, "$451.9")
+text(1.9, 482, "$459.4")
+text(3.1, 544, "$522.2")
+text(4.3, 660, "$640.2")
+text(5.5, 769, "$747.6")
+text(6.7, 549, "$529.0")
+text(7.9, 525, "$501.4")
+text(9.1, 553, "$532.9")
+
